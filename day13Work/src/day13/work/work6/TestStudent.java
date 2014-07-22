@@ -21,7 +21,7 @@ public class TestStudent {
 		
 		man.get(0).calcSungjuk();
 		man.get(1).calcSungjuk();
-		
+		System.out.println("test");
 		
 		for(int i = 0 ; i<man.size(); i++)
 		{
