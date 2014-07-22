@@ -27,6 +27,7 @@ public class TestWork2 {
 		System.out.println(" 처리후 개수 : " + ch.length);
 		System.out.println("대문자 변환 : " + s2);
 		
+		
 	}
 
 }
