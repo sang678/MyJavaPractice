@@ -14,6 +14,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -33,7 +35,10 @@ public class MyTestForGUI extends JFrame implements KeyListener, ActionListener{
 	JTextField jtf= new JTextField(63);
 	JButton jbt = new JButton("입력");
 	Client client;
-	
+	Boolean chatStartFlag = false;
+	Boolean soManyChatFlag = false;
+	Boolean chatCan = true;
+	int chatCount = 0;
 	
 	public MyTestForGUI() {
 		// TODO Auto-generated constructor stub
@@ -88,15 +93,83 @@ public class MyTestForGUI extends JFrame implements KeyListener, ActionListener{
 		client.start();
 		setVisible(true);
 		
+		 new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				System.out.println("스레드 스타트 됨");
+				
+				System.out.println(chatStartFlag.hashCode());
+				while(true)
+				{
+					
+						if( chatCan == true && chatStartFlag== true )
+						{
+							System.out.println(" 챗캔 플래그 캔 둘다 트루 ");
+							chatCan = false;
+							Timer timer = new Timer();
+							timer.schedule(new TimerTask() {
+								
+								@Override
+								public void run() {
+									// TODO Auto-generated method stub
+									System.out.println("run/ct:" + chatCount);
+									if(chatCount>5)
+										soManyChatFlag = true;
+									
+									chatStartFlag = false;
+									chatCan = true;
+								
+								}
+							}, 3000);
+					
+						}
+						else if(soManyChatFlag == true)
+						{
+							System.out.println("somany");
+								Timer timer = new Timer();
+								timer.schedule(new TimerTask() {
+									
+									@Override
+									public void run() {
+										// TODO Auto-generated method stub
+										soManyChatFlag = false;
+									
+										
+									
+									}
+								}, 3000);
+							
+						}
+						
+				}
+			}
+		}).start();
+		
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		if(arg0.getSource() == jbt){
-			client.ClientSender(jtf.getText());
-			jtf.setText("");
-			  }
+			
+			if(soManyChatFlag)
+			{
+				jta.append("단기간 과도한 채팅으로 잠시 채팅이 정지 됩니다");
+			}
+			else
+			{
+				System.out.println(chatStartFlag + " / " + chatCan);
+				System.out.println(chatStartFlag.hashCode());
+				chatStartFlag = true;
+				chatCount++;
+				client.ClientSender(jtf.getText());
+				jtf.setText("");
+			}
+			
+			
+		}
 	}
 	
 	@Override
@@ -106,8 +179,17 @@ public class MyTestForGUI extends JFrame implements KeyListener, ActionListener{
 		
 		if(e.getKeyCode() == KeyEvent.VK_ENTER)
 		{
-			client.ClientSender(jtf.getText());
-			jtf.setText("");
+			if(soManyChatFlag)
+			{
+				jta.append("단기간 과도한 채팅으로 잠시 채팅이 정지 됩니다\n");
+			}
+			else
+			{
+				chatStartFlag = true;
+				chatCount++;
+				client.ClientSender(jtf.getText());
+				jtf.setText("");
+			}
 		}
 		
 	}
@@ -146,7 +228,7 @@ public class MyTestForGUI extends JFrame implements KeyListener, ActionListener{
 		public void start()
 		{
 			 try {
-				client = new Socket("IP 입력", 5000);
+				client = new Socket("222.117.102.129", 5000);
 				out = new PrintWriter(client.getOutputStream(),true);
 				in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 				ClientReceiver receiver= new ClientReceiver();
