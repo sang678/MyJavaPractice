@@ -40,6 +40,7 @@ public class NotePadFrame extends JFrame implements ActionListener{
 	UndoManager manager = new UndoManager();
 	FontDialog fontDialog;
 	InformationDialog informationDialog;
+	NotePadPopupMenu popup;
 	public NotePadFrame() {
 		// TODO Auto-generated constructor stub
 		
@@ -49,6 +50,8 @@ public class NotePadFrame extends JFrame implements ActionListener{
 		toolkit = Toolkit.getDefaultToolkit();
 		fontDialog= new FontDialog(this);
 		informationDialog = new InformationDialog();
+		popup =new NotePadPopupMenu(contents);
+		popup.setActionListener(this);
 	
 		
 		
@@ -122,11 +125,11 @@ public class NotePadFrame extends JFrame implements ActionListener{
 		}
 		
 		//메뉴 - 편집
-		if(arg0.getActionCommand().equals("되돌리기 (U)"))
+		if(arg0.getActionCommand().equals("되돌리기 (Y)"))
 		{
 			 if (manager.canRedo()) manager.redo();
 		}
-		else if(arg0.getActionCommand().equals("실행취소 (Z)"))
+		else if(arg0.getActionCommand().equals("실행취소 (U)"))
 		{
 			 if (manager.canUndo()) manager.undo();
 		}
@@ -146,6 +149,8 @@ public class NotePadFrame extends JFrame implements ActionListener{
 		{
 			contents.selectAll();
 		}
+		
+		
 		
 		//메뉴 - 서식
 		if(arg0.getActionCommand().equals("글꼴 (F)"))

@@ -71,7 +71,7 @@ public class NotePadMenu {
 	
 		menuEdit = new JMenu("편집 (E)");
 		redo = new JMenuItem("되돌리기 (Y)");
-		undo = new JMenuItem("실행취소 (Z)");
+		undo = new JMenuItem("실행취소 (U)");
 		cut = new JMenuItem(new DefaultEditorKit.CutAction());
 		cut.setText("잘라내기 (T)");
 		copy = new JMenuItem(new DefaultEditorKit.CopyAction());
@@ -90,10 +90,10 @@ public class NotePadMenu {
 		
 		menuEdit.setMnemonic('e');
 		redo.setMnemonic('y');
-		undo.setMnemonic('z');
+		undo.setMnemonic('u');
 		copy.setMnemonic('c');
-		paste.setMnemonic('v');
-		cut.setMnemonic('x');
+		paste.setMnemonic('p');
+		cut.setMnemonic('t');
 		selectAllText.setMnemonic('a');
 		
 		menuEdit.add(redo);
