@@ -32,6 +32,7 @@ import note.dialog.FontDialog;
 import note.dialog.InformationDialog;
 
 public class NotePadFrame extends JFrame implements ActionListener{
+	private int i =0;
 	JTextArea contents;
 	Toolkit toolkit;
 	File file;
@@ -249,6 +250,7 @@ public class NotePadFrame extends JFrame implements ActionListener{
 		else
 		{
 			setTitle("메모장 - 새 파일");
+			file = null;
 		}
 		
 		
@@ -266,7 +268,9 @@ public class NotePadFrame extends JFrame implements ActionListener{
 			
 			if(fileChooser.showSaveDialog(this) == fileChooser.APPROVE_OPTION)
 			{
+				
 				file = fileChooser.getSelectedFile();
+	
 			}
 			else
 			{	return; }
@@ -276,7 +280,24 @@ public class NotePadFrame extends JFrame implements ActionListener{
 	
 		FileOutputStream fout = null;
 		try {
-			fout = new FileOutputStream(file);
+			
+			if(fileChooser.getFileFilter().getDescription().equals("txt 파일"))
+			{
+				if(!file.getPath().substring(file.getPath().length()-4).equals(".txt"))
+				{
+					file = new File(file.getPath()+".txt");
+					fout = new FileOutputStream(file);
+				}
+				else
+				{
+					fout = new FileOutputStream(file);
+				}
+			}
+			else
+			{
+				fout = new FileOutputStream(file);
+			}
+				
 			fout.write(contents.getText().getBytes());
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -293,25 +314,42 @@ public class NotePadFrame extends JFrame implements ActionListener{
 				e.printStackTrace();
 			}
 			if(file != null)
+			{
+				
 				setTitle(file.getPath());
+			}
 		}
 		
 	}
 	
 	public void loadFile()
 	{
-		fileChooser.showOpenDialog(this);
+		if( !(fileChooser.showOpenDialog(this) == fileChooser.APPROVE_OPTION) )
+			return ;
 		int ch ;
 		String data = "";
 		file = fileChooser.getSelectedFile();
+		System.out.println(file);
 		if(file == null)
 				return;
+		
 		
 		
 		FileInputStream fin = null;
 		InputStreamReader in = null;
 		try {
+			
 			fin = new FileInputStream(file);
+			if(fileChooser.getFileFilter().getDescription().equals("txt 파일"))
+			{
+				if(!file.getPath().substring(file.getPath().length()-4).equals(".txt"))
+				{
+					System.out.println("없");
+					file = new File(file.getPath()+".txt");
+					fin = new FileInputStream(file);
+				}	
+			}
+				
 			in = new InputStreamReader(fin);
 			while((ch = in.read()) != -1)
 				data += (char)ch;
@@ -345,6 +383,8 @@ public class NotePadFrame extends JFrame implements ActionListener{
 			public void approveSelection() {
 				// TODO Auto-generated method stub
 				File f = getSelectedFile();
+			
+				
 		        if(f.exists() && getDialogType() == SAVE_DIALOG){
 		            int result = JOptionPane.showConfirmDialog(this,"The file exists, overwrite?","Existing file",JOptionPane.YES_NO_CANCEL_OPTION);
 		            switch(result){
@@ -372,6 +412,9 @@ public class NotePadFrame extends JFrame implements ActionListener{
 		
 		return fileChooser;
 	}
+	
+	
+
 	
 	public static void main(String args[])
 	{
