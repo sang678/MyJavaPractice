@@ -1,4 +1,4 @@
-package note.dialog;
+package myPaint;
 
 import java.awt.Font;
 import java.awt.Graphics;
@@ -15,10 +15,10 @@ public class InformationDialog extends JDialog{
 			// TODO Auto-generated method stub
 			super.paintComponent(arg0);
 			
-			arg0.setFont(new Font("�����ٸ����", Font.BOLD, 15));
-			arg0.drawString("��      �� : �ѱ�������б�", 30, 65);
-			arg0.drawString("������ : �����", 30, 80);
-			arg0.drawString("��      �� :1.1.1", 30, 95);
+			arg0.setFont(new Font("나눔바른고딕", Font.BOLD, 15));
+			arg0.drawString("소 속 : 한국교통대학교", 30, 65);
+			arg0.drawString("만든사람 : 엄상근", 30, 80);
+			arg0.drawString("버 전 :1.0.0", 30, 95);
 		}
 	}
 	
